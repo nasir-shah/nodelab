@@ -5,15 +5,18 @@ const argv = process.argv
 
 if(argv.length >= 3){
     const location = argv[2]
-    geocode(location,(error,{longitude,latitude,place})=>{
+    geocode(location,(error,response)=>{
         if(error){
             return console.log(error)
         }
-        forecast(longitude,latitude,(error,{temperature,feelslike})=>{
+        longitude = response.body.features[0].center[0]
+        latitude = response.body.features[0].center[1]
+        place = response.body.features[0].place_name
+        forecast(longitude,latitude,(error,{temp,feels_like})=>{
             if(error){
                 return console.log(error)
             }
-            console.log(chalk.green.inverse('It is '+ temperature+ ' degree outside in '+ place + ' and it feels like ' + feelslike + ' degree'))
+            console.log(chalk.green.inverse('It is '+ temp+ ' degree outside in '+ place + ' and it feels like ' + feels_like + ' degree'))
             })
      })
 }else{
